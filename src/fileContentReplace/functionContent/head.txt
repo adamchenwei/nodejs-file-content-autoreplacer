@@ -1,0 +1,5 @@
+/* eslint-disable */
+window.pclnWaitPageAnimationInstruction = function generateAnimation(tripsDetail) {
+  var slices = tripsDetail.slices;
+  var tripNumber = tripsDetail.tripNumber;
+  var animationString = '
