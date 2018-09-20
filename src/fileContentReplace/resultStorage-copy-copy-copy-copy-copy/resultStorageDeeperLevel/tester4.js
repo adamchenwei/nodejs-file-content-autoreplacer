@@ -1,5 +1,5 @@
 import fs from 'fs';
-import cors from 'cors';
+import express from 'express';
 
 function abc() {
   console.log('abc')

@@ -62,7 +62,20 @@ function onLog(filename, content) {
 function onFileContentLoaded(filename, content) {
   let newContentArray = content.toString().split("\n");
   console.log(newContentArray);
-  newContentArray.splice(1, 0, `import LOTS from 'MANY';`);
+  let lastImportLineIndex = null;
+  //insert the third party import
+  newContentArray.splice(1, 0, `import initStoryshots from '@storybook/addon-storyshots';`);
+
+  for(let i=0;i<newContentArray.length; i+=1) {
+    console.log('----->>> line')
+    console.log( newContentArray[i].match(/\import/i) ? 'matched' : 'not match');
+    if (newContentArray[i].match(/\import/i)) {
+      lastImportLineIndex = i;
+    };
+  }
+
+  //insert the execusion line
+  newContentArray.splice(lastImportLineIndex+1, 0, `initStoryshots();`);
   const newContent = newContentArray.join('\n');
   fs.writeFile(filename, newContent, 'utf8', function (err) {
       console.log(`wrote new content to ${filename}`);
@@ -85,7 +98,10 @@ function onError(error, type) {
 }
 
 console.log('start>>>>>>>>>>>>>>>>>> ASYNC!');
+//LOCAL TEST
 const SRC = `${PROJECT_ROOT_DIR}/src/fileContentReplace/resultStorage`;
+//LIVE PRODUCTION!
+//const SRC = `/Users/adamchenwei/www/dashboard2-central-web-client/src`;
 console.log(`src folder: `)
 loopFiles(SRC, onFileContentLoaded, onError);
 console.log('done<<<<<<<<<<<<<<<<<<<');
